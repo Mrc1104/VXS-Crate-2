@@ -4,7 +4,6 @@
 
 #include <ap_int.h>
 #include <hls_stream.h>
-
 #include "variables.h"
 
 // hit_t:
@@ -20,14 +19,12 @@ typedef struct
 
 // fadc_hits_t:
 // - contains 70  VXS channels of hit_t reported by the FADCs each 32ns pulse
-// - vxs_ch[ 0 ] to vxs_ch[ 15 ]: VME slot 8, ch 0 to 15 FADC channels
-// - vxs_ch[ 16 ] to vxs_ch[ 31 ]: VME slot 9, ch 0 to 15 FADC channels
-// - vxs_ch[ 32 ] to vxs_ch[ 47 ]: VME slot 10, ch 0 to 15 FADC channels
+// - vxs_ch[ 0 ] to vxs_ch[ 15 ]: VME slot __, ch 0 to 15 FADC channels
+// - vxs_ch[ 16 ] to vxs_ch[ 31 ]: VME slot __, ch 0 to 15 FADC channels
+// - vxs_ch[ 32 ] to vxs_ch[ 47 ]: VME slot __, ch 0 to 15 FADC channels
 // - (VXS switch A and B are at VME slot positions 11,12 so the FADC cannot be installed here
-// - vxs_ch[ 48 ] to vxs_ch[ 63 ]: VME slot 13, ch 0 to 15 FADC channels
-// - vxs_ch[ 64 ] to vxs_ch[ 79 ]: VME slot 14, ch 0 to 15 FADC channels
-// ...
-// - vxs_ch[ 114 ] to vxs_ch[ 159 ]: VME slot 19, ch 0 to 15 FADC channels
+// - vxs_ch[ 48 ] to vxs_ch[ 63 ]: VME slot __, ch 0 to 15 FADC channels
+// - vxs_ch[ 64 ] to vxs_ch[ 79 ]: VME slot __, ch 0 to 15 FADC channels
 // Note: 
 //      28 Channels -> ShowerMax
 //      28 Channels -> Pion Det
@@ -39,7 +36,7 @@ typedef struct
 
 typedef struct
 {
-	hit_t vxs_chan[N_CHAN_SEC];
+	hit_t vxs_chan[N_CHAN];
 } fadc_hits_t;
 
 

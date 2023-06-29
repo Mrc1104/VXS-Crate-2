@@ -1,5 +1,5 @@
 #pragma once
-#include "../moller_hls.h"
+#include "../variables.h"
 #include "../chan_map.h"
 
 const chan_map chmap[N_SLOT][16] = {

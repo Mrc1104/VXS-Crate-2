@@ -1,11 +1,13 @@
 #include "vxs.h"
 #include "variables.h"
+
+#include "chan_map/naive_map.h"
 void generateRndData(hit_t* vxs_chan){
 
 	std::srand(1); // set specific seed for testing latency
 	ap_uint<13> energy;
 	ap_uint<3> time;
-	for(int ch = 0; ch < N_CHAN_SEC; ch++){
+	for(int ch = 0; ch < N_CHAN; ch++){
 		energy = 0;
 		time = 0;
 		if(ch%8 < 4){ // rings 1 - 4
