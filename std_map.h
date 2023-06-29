@@ -1,6 +1,7 @@
 #ifndef STD_MAP_H
 #define STD_MAP_H
 #include <map>
+#include "detector_type.h"
 const std::map<std::string, det_type> m = 
 {
     {"NONE", NONE},
@@ -17,6 +18,7 @@ const std::map<std::string, det_type> m =
 const std::map<det_type, std::string> m2 = 
 {
     {NONE, "NONE"},
+    {RING_ONE, "RING_ONE"},
     {RING_TWO, "RING_TWO"},
     {RING_THREE, "RING_THREE"},
     {RING_FOUR, "RING_FOUR"},
