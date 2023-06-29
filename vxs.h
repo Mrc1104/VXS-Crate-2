@@ -40,7 +40,36 @@ typedef struct
 } fadc_hits_t;
 
 
+// trigger_t:
+// - trig: 			   bitmap for time - [0]=>0ns, [1]=>4ns, [2]=>8ns, ..., [7]=28ns, when bit=0 no trigger, when bit=1 trigger
+// - 8-element array, one for each ring: [0] = r1, [1] = r2, ..., [7] = r7; when bit=0 no time_trigger, when bit=1 time_trigger
+typedef struct
+{
+	ap_uint<8> trig[8];
+} trigger_t;
 
+// ring_trigger_t:
+// - ring trig: bitmap for ring hit - [0]=r0, [1]=r1, [2]=r2, ..., [7]=r6; when bit=0 no ring_trigger, when bit=1 ring_trigger
+typedef struct 
+{
+	ap_uint<8> ring;
+} ring_trigger_t;
+
+
+// Function Declarations 
+
+/*
+*  vsx:
+*  Brief: Top Function for the Vitis program. 
+*  Description: Runs through all fadc data, generates timing bitmap,
+*				detector-hit bitmap, coincidence for the TRIG_SCINT,
+*								 
+*/
+void vxs
+(
+
+
+);
 
 
 

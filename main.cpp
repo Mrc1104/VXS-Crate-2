@@ -35,7 +35,7 @@ void generateRndData(hit_t* vxs_chan){
 
 int main()
 {
-	ap_uint<3> hit_dt = 2; // time tolerance for coincidence (in 4ns ticks)
+	ap_uint<3> hit_dt = COINCIDENCE_TOLERANCE; // time tolerance for coincidence (in 4ns ticks)
 	// ap_uint<13> energy_threshold = 5e3;
 	ap_uint<13> energy_threshold = 1;
 	ap_uint<16> ring_threshold = 1;
