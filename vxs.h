@@ -42,18 +42,26 @@ typedef struct
 
 // trigger_t:
 // - trig: 			   bitmap for time - [0]=>0ns, [1]=>4ns, [2]=>8ns, ..., [7]=28ns, when bit=0 no trigger, when bit=1 trigger
-// - 8-element array, one for each ring: [0] = r1, [1] = r2, ..., [7] = r7; when bit=0 no time_trigger, when bit=1 time_trigger
 typedef struct
 {
-	ap_uint<8> trig[8];
+	ap_uint<8> trig;
 } trigger_t;
 
+// - 28-element array, one for each detector and stores timing info: [0] = det_1, [1] = det_2, ..., [7] = det_7, ..., etc; when bit=0 no time_trigger, when bit=1 time_trigger
+// - Comment: is there a better way to store and transmit this data?
+typedef struct
+{
+	trigger_t det_trig[28];
+} trigger_all_det_t;
+
 // ring_trigger_t:
-// - ring trig: bitmap for ring hit - [0]=r0, [1]=r1, [2]=r2, ..., [7]=r6; when bit=0 no ring_trigger, when bit=1 ring_trigger
+// - segment: bitmap for detector bitmap for each segment - [0]=s0, [1]=s1, [2]=s2, ..., [7]=s6; when bit=0 no ring_trigger, when bit=1 ring_trigger
+// - bitpadding: padding to make struct 32 bits wide
 typedef struct 
 {
-	ap_uint<8> ring;
-} ring_trigger_t;
+	ap_uint<28> segment;
+	ap_uint<4> bitpadding;
+} det_bitmap_t;
 
 
 // Function Declarations 
