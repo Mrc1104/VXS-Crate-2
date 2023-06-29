@@ -46,7 +46,7 @@ int main()
 	hls::stream<ring_trigger_t> s_ring_trigger; // output stream for for the ring trigger data
 	hls::stream<ring_all_t> s_ring_all_t; // output stream for the ring data
     
-	fadc_hits_t fadc_hits = 0;
+	fadc_hits_t fadc_hits;
 	generateRndData(fadc_hits.vxs_chan);
 
 
