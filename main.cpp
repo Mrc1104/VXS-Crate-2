@@ -77,5 +77,28 @@ int main()
 		);
 	}
 
+
+	while( !s_det_timing.empty() ){
+		trigger_array_t output = s_det_timing.read();
+	}
+	while( !s_pion_bitmap.empty() ){
+		shower_pion_det_bitmap_t output = s_pion_bitmap.read();
+	}
+	while( !s_shower_bitmap.empty() ){
+		shower_pion_det_bitmap_t output = s_shower_bitmap.read();
+	}
+	while( !s_scint_bitmap.empty() ){
+		s_scint_bitmap output = s_scint_bitmap.read();
+	}
+	while( !s_pion_info.empty() ){
+		det_information_t output = s_pion_info.read();
+	}
+	while( !s_shower_info.empty() ){
+		det_information_t output = s_shower_info.empty();
+	}
+	while( !s_scint_info.empty() ){
+		det_information_t output.read();
+	}
+	hls::stream<det_information_t> s_scint_info;
     return 0;    
 }
