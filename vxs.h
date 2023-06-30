@@ -51,18 +51,39 @@ typedef struct
 // - Comment: is there a better way to store and transmit this data?
 typedef struct
 {
-	trigger_t det_trig[28];
-} trigger_all_det_t;
+	trigger_t det_trig[28]; // one element corresponds to one detector
+} trigger_shower_pion_det_t;
 
-// ring_trigger_t:
-// - segment: bitmap for detector bitmap for each segment - [0]=s0, [1]=s1, [2]=s2, ..., [7]=s6; when bit=0 no ring_trigger, when bit=1 ring_trigger
+// - 7-element array, one for each detector and stores timing info: [0] = det_1, [1] = det_2, ..., [7] = det_7, ..., etc; when bit=0 no time_trigger, when bit=1 time_trigger
+// - Comment: is there a better way to store and transmit this data?
+typedef struct
+{
+	trigger_t det_trig[7]; // one element corresponds to one detector
+} trigger_scint_det_t;
+
+// shower_pion_det_bitmap_t:
+// - segment: bitmap for detector bitmap for each segment - [0]=s0, [1]=s1, [2]=s2, ..., [7]=s6; when bit=0 no trigger, when bit=1 trigger
 // - bitpadding: padding to make struct 32 bits wide
-typedef struct 
+typedef struct
 {
 	ap_uint<28> segment;
 	ap_uint<4> bitpadding;
-} det_bitmap_t;
+} shower_pion_det_bitmap_t;
 
+// scint_det_bitmap_t:
+// - segment: bitmap for detector bitmap for each segment - [0]=s0, [1]=s1, [2]=s2, ..., [7]=s6; when bit=0 no trigger, when bit=1 trigger
+// - bitpadding: padding to make struct 8 bits wide
+typedef struct 
+{
+	ap_uint<7> segment;
+	ap_uint<1> bitpadding;
+} scint_det_bitmap_t;
+
+typedef struct
+{
+	ap_uint<16> total_energy;
+	ap_uint<8> total_hits;
+} det_information_t;
 
 // Function Declarations 
 
@@ -71,12 +92,29 @@ typedef struct
 *  Brief: Top Function for the Vitis program. 
 *  Description: Runs through all fadc data, generates timing bitmap,
 *				detector-hit bitmap, coincidence for the TRIG_SCINT,
-*								 
+*  Parameter:	hit_dt - coincidence tolerance (given in 4ns ticks)
+*  				energy_threshold - minimum energy for a hit to occur
+*  				detector_threshold - the minimum summed energy over all segments for a detector to be hit
+*  				s_fadc_hits - input stream of fadc data
+*  				s_pion_trig - output stream of pion_det trigger data
+*  				s_shower_trig - output stream of shower_det trigger data
+*  				s_scint_trig - output stream of scint_det trigger data
+*  				s_pion_info - output stream of total pion_det information
+*  				s_shower_info - output stream of total shower_det information
+*  				s_scint_info - output stream of total scint_det information
 */
 void vxs
 (
-
-
+		ap_uint<3> hit_dt,
+		ap_uint<13> energy_threshold,
+		ap_uint<16> detector_threshold,
+		hls::stream<fadc_hits_t> s_fadc_hits,
+		hls::stream<trigger_shower_pion_det_t> s_pion_trig,
+		hls::stream<trigger_shower_pion_det_t> s_shower_trig,
+		hls::strean<shower_pion_det_bitmap_t>s_scint_trig,
+		hls::stream<det_information_t> s_pion_info,
+		hls::stream<det_information_t> s_shower_info,
+		hls::stream<det_information_t> s_scint_info
 );
 
 
