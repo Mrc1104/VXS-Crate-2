@@ -5,6 +5,8 @@
 #include <ap_int.h>
 #include <hls_stream.h>
 #include "variables.h"
+#include "chan_map.h"
+#include "std_map.h"
 
 // hit_t:
 // - every 32ns each fadc reports 13 bit energy, and 3 bit hit time (time offset in current 32ns clock: 0=0ns, 1=4ns, 2=8ns, ..., 7=28ns)
@@ -108,13 +110,14 @@ void vxs
 		ap_uint<3> hit_dt,
 		ap_uint<13> energy_threshold,
 		ap_uint<16> detector_threshold,
-		hls::stream<fadc_hits_t> s_fadc_hits,
-		hls::stream<trigger_shower_pion_det_t> s_pion_trig,
-		hls::stream<trigger_shower_pion_det_t> s_shower_trig,
-		hls::strean<shower_pion_det_bitmap_t>s_scint_trig,
-		hls::stream<det_information_t> s_pion_info,
-		hls::stream<det_information_t> s_shower_info,
-		hls::stream<det_information_t> s_scint_info
+		const chan_map arr_chan_map[][16],
+		hls::stream<fadc_hits_t> &s_fadc_hits,
+		hls::stream<trigger_shower_pion_det_t> &s_pion_trig,
+		hls::stream<trigger_shower_pion_det_t> &s_shower_trig,
+		hls::stream<shower_pion_det_bitmap_t> &s_scint_trig,
+		hls::stream<det_information_t> &s_pion_info,
+		hls::stream<det_information_t> &s_shower_info,
+		hls::stream<det_information_t> &s_scint_info
 );
 
 
