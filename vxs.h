@@ -87,7 +87,8 @@ typedef struct
 	ap_uint<1> bitpadding;
 } scint_det_bitmap_t;
 
-//
+// det_information_t
+// - total_energy: the summed energy across all detectors.
 typedef struct
 {
 	ap_uint<16> total_energy;
@@ -156,6 +157,21 @@ void make_timing_bitmap(const ap_uint<3> fadc_time, trigger_t *ptr_timing);
  */
 ap_uint<1> scint_coincidence(const ap_uint<3> scint1, const ap_uint<3> scint2, const ap_uint<3> hit_dt);
 
-shower_pion_det_bitmap_t make_bitmap();
+/* make_shower_pion_bitmap
+ * Brief: 		creates a bitmap of the segment that were hit
+ * Description: Sets the appropriate bit to 1 if the corresponding segment was hit
+ * Parameter:	seg_bitmap - pointer to the segment bitmap
+ * 				seg_num - segment number that was hit
+ */
+void make_shower_pion_bitmap(ap_uint<28>* seg_bitmap, int seg_num);
+
+/* make_scint_bitmap
+ * Brief: 		creates a bitmap of the segment that were hit
+ * Description: Sets the appropriate bit to 1 if the corresponding segment was hit
+ * Parameter:	seg_bitmap - pointer to the segment bitmap
+ * 				seg_num - segment number that was hit
+ */
+void make_scint_bitmap(ap_uint<7>* seg_bitmap, int seg_num);
+
 
 #endif

@@ -22,9 +22,18 @@ void vxs
 
 	// initilize data elements
 	trigger_array_t arr_trig_bitmap = {0,0,0};
+
 	shower_pion_det_bitmap_t shower_bitmap = {0,0};
 	shower_pion_det_bitmap_t pion_bitmap = {0,0};
-	scint_det_bitmap_t scit_bitmap = {0,0,};
+	scint_det_bitmap_t scint_bitmap = {0,0,};
+
+	// possible optimization, store hit data in new arrays then add later for better parallelism
+//	det_information_t shower_information[28] = {0,0};
+//	det_information_t pion_information[28] = {0,0};
+//	det_information_t scint_information[7] = {0,0};
+		det_information_t shower_information = {0,0};
+		det_information_t pion_information = {0,0};
+		det_information_t scint_information = {0,0};
 
 	for(int ch = 0; ch < N_CHAN; ch++){
 		if(!fadc_hits.vxs_chan[ch].e>=energy_threshold){continue;}
@@ -63,18 +72,38 @@ void vxs
 					// the shortest time is out designated "true" time ; scint2_time is shorter than scint1
 					make_timing_bitmap(scint2_time, &arr_trig_bitmap.trig_array[det_id-7]);
 				}
+
+				// the scint pairs are aligned front to back so they correspond to the same 4 segments (each pair covers 4 segments)
+				make_scint_bitmap(&scint_bitmap.segment, seg_num);
+				scint_information.total_energy += fadc_hits.vxs_chan[ch].e;
 			}
 		}
 		else
 		{
+			if(det_id == PION_DET)
+			{
+				make_shower_pion_bitmap(&pion_bitmap.segment, seg_num);
+				pion_information.total_energy += fadc_hits.vxs_chan[ch].e;
+			}
+			if(det_id == SHOWER_MAX)
+			{
+				make_shower_pion_bitmap(&shower_bitmap.segment, seg_num);
+				shower_information.total_energy += fadc_hits.vxs_chan[ch].e;
+			}
 			make_timing_bitmap(fadc_hits.vxs_chan[ch].t, &arr_trig_bitmap.trig_array[det_id-7]);
-		}
 
+		}
+		// make bitmaps
 	} // end for-loop
 
-
-
-
+	// write data to output streams
+	s_det_timing.write(arr_trig_bitmap);
+	s_pion_bitmap.write(pion_bitmap);
+	s_shower_bitmap.write(shower_bitmap);
+	s_scint_bitmap.write(scint_bitmap);
+	s_pion_info.write(pion_information);
+	s_shower_info.write(shower_information);
+	s_scint_info.write(scint_information);
 }
 
 void make_timing_bitmap(const ap_uint<3> fadc_time, trigger_t *ptr_timing)
@@ -95,4 +124,14 @@ ap_uint<1> scint_coincidence(const ap_uint<3> scint1, const ap_uint<3> scint2, a
 	ap_uint<3> diff = (scint1 < scint2) ? (scint2 - scint1) : (scint1 - scint2);
 	return (diff <= hit_dt) ? 1 : 0;
 
+}
+
+void make_shower_pion_bitmap(ap_uint<28>* seg_bitmap, int seg_num)
+{
+	seg_bitmap[seg_num] = 1;
+}
+
+void make_scint_bitmap(ap_uint<7>* seg_bitmap, int seg_num)
+{
+	seg_bitmap[seg_num] = 1;
 }
