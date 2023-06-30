@@ -1,6 +1,7 @@
 #ifndef STD_MAP_H
 #define STD_MAP_H
 #include <map>
+#include <string>
 #include "detector_type.h"
 const std::map<std::string, det_type> m = 
 {

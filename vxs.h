@@ -6,7 +6,13 @@
 #include <hls_stream.h>
 #include "variables.h"
 #include "chan_map.h"
+#include "detector_type.h"
 #include "std_map.h"
+
+// Detector to channel mapping
+// generated from parameter file (usually found in chan_map/*.conf
+// see map.csh to create new parameter file(s) and/or header file(s)
+#include "chan_map/naive_map.h"
 
 // hit_t:
 // - every 32ns each fadc reports 13 bit energy, and 3 bit hit time (time offset in current 32ns clock: 0=0ns, 1=4ns, 2=8ns, ..., 7=28ns)
@@ -43,25 +49,25 @@ typedef struct
 
 
 // trigger_t:
-// - trig: 			   bitmap for time - [0]=>0ns, [1]=>4ns, [2]=>8ns, ..., [7]=28ns, when bit=0 no trigger, when bit=1 trigger
+// - trig:    bitmap for time - [0]=>0ns, [1]=>4ns, [2]=>8ns, ..., [7]=28ns, when bit=0 no trigger, when bit=1 trigger
 typedef struct
 {
 	ap_uint<8> trig;
 } trigger_t;
 
-// - 28-element array, one for each detector and stores timing info: [0] = det_1, [1] = det_2, ..., [7] = det_7, ..., etc; when bit=0 no time_trigger, when bit=1 time_trigger
-// - Comment: is there a better way to store and transmit this data?
+// trigger_array_t
+// - trig_array: array of the detector timing bitmaps.
+//				 We have three detector types so three elements
+//				 IMPORTANT:
+//				 trig_array[0] => scint detectors
+//				 trif_array[1] => pion detectors
+//				 trig_array[2] => shower detectors
+//				 See detector_type.h to see how this was determined (det_enum int# -> zero)
 typedef struct
 {
-	trigger_t det_trig[28]; // one element corresponds to one detector
-} trigger_shower_pion_det_t;
+	trigger_t trig_array[3];
+} trigger_array_t;
 
-// - 7-element array, one for each detector and stores timing info: [0] = det_1, [1] = det_2, ..., [7] = det_7, ..., etc; when bit=0 no time_trigger, when bit=1 time_trigger
-// - Comment: is there a better way to store and transmit this data?
-typedef struct
-{
-	trigger_t det_trig[7]; // one element corresponds to one detector
-} trigger_scint_det_t;
 
 // shower_pion_det_bitmap_t:
 // - segment: bitmap for detector bitmap for each segment - [0]=s0, [1]=s1, [2]=s2, ..., [7]=s6; when bit=0 no trigger, when bit=1 trigger
@@ -81,6 +87,7 @@ typedef struct
 	ap_uint<1> bitpadding;
 } scint_det_bitmap_t;
 
+//
 typedef struct
 {
 	ap_uint<16> total_energy;
@@ -110,20 +117,45 @@ void vxs
 		ap_uint<3> hit_dt,
 		ap_uint<13> energy_threshold,
 		ap_uint<16> detector_threshold,
-		const chan_map arr_chan_map[][16],
 		hls::stream<fadc_hits_t> &s_fadc_hits,
-		hls::stream<trigger_shower_pion_det_t> &s_pion_trig,
-		hls::stream<trigger_shower_pion_det_t> &s_shower_trig,
-		hls::stream<shower_pion_det_bitmap_t> &s_scint_trig,
+		hls::stream<trigger_array_t> &s_det_timing,
+		hls::stream<shower_pion_det_bitmap_t> &s_pion_bitmap,
+		hls::stream<shower_pion_det_bitmap_t> &s_shower_bitmap,
+		hls::stream<scint_det_bitmap_t> &s_scint_bitmap,
 		hls::stream<det_information_t> &s_pion_info,
 		hls::stream<det_information_t> &s_shower_info,
 		hls::stream<det_information_t> &s_scint_info
 );
 
+/* make_timing_bitmap:
+ * Brief: 		creates a timing bitmap from input data
+ * Description: The time reported by the fadc is backwards. Early events arrive
+ * 				to the fadc and wait for the next clock cycle so they are reported
+ * 				as a later time. This functions rearranges the time appropriately
+ * 				'Early' events -> true later
+ * 				'Late' events -> true early
+ * Parameter:	fadc_time - time from the fadc (given in 4ns ticks)
+ * 				ptr_timing - address of the trigger bitmap
+ * Comment:
+ * 				See detector_type.h to see how this was determined
+ *				det_id = 7 => scint ; arr_trig_bitmap[0] => scint
+ *				det_id = 8 => pion  ; arr_trig_bitmap[1] => pion
+ *				det_id = 9 => shower; arr_trig_bitmap[2] => shower
+ */
+void make_timing_bitmap(const ap_uint<3> fadc_time, trigger_t *ptr_timing);
 
+/* scint_coincidence:
+ * Brief: 		checks to see if scint pairs meet coincidence condition
+ * Description: Takes in the timing information for each pair and computes if
+ * 				the difference is within the defined tolerance
+ * 				tolerance defined in variables.h
+ * Parameter:   scint1 - timing information for the first scint
+ * 				scint2 - timing information for th esecond scit
+ * 				hit_dt - coincidence tolerance (given in 4ns ticks)
+ *
+ */
+ap_uint<1> scint_coincidence(const ap_uint<3> scint1, const ap_uint<3> scint2, const ap_uint<3> hit_dt);
 
-
-
-
+shower_pion_det_bitmap_t make_bitmap();
 
 #endif

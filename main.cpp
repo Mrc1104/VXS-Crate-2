@@ -3,7 +3,6 @@
 #include "vxs.h"
 #include "variables.h"
 
-#include "chan_map/naive_map.h"
 void generateRndData(hit_t* vxs_chan){
 
 	std::srand(20); // set specific seed for testing latency
@@ -47,9 +46,10 @@ int main()
 	ap_uint<16> detector_threshold = 1;
 	// hls::stream<T> behaves like a fifo array with infinite depth
 	hls::stream<fadc_hits_t> s_fadc_hits; // raw data stream from the
-	hls::stream<trigger_shower_pion_det_t> s_pion_trig;
-	hls::stream<trigger_shower_pion_det_t> s_shower_trig;
-	hls::stream<shower_pion_det_bitmap_t> s_scint_trig;
+	hls::stream<trigger_array_t> s_det_timing;
+	hls::stream<shower_pion_det_bitmap_t> s_pion_bitmap;
+	hls::stream<shower_pion_det_bitmap_t> s_shower_bitmap;
+	hls::stream<scint_det_bitmap_t> s_scint_bitmap;
 	hls::stream<det_information_t> s_pion_info;
 	hls::stream<det_information_t> s_shower_info;
 	hls::stream<det_information_t> s_scint_info;
@@ -66,11 +66,11 @@ int main()
 				hit_dt,
 				energy_threshold,
 				detector_threshold,
-				chmap,
 				s_fadc_hits,
-				s_pion_trig,
-				s_shower_trig,
-				s_scint_trig,
+				s_det_timing,
+				s_pion_bitmap,
+				s_shower_bitmap,
+				s_scint_bitmap,
 				s_pion_info,
 				s_shower_info,
 				s_scint_info
