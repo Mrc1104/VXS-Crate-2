@@ -99,6 +99,8 @@ int main()
 	while( !s_scint_info.empty() ){
 		det_information_t output.read();
 	}
-	hls::stream<det_information_t> s_scint_info;
+
+
+
     return 0;    
 }
