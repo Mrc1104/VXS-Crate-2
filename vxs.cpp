@@ -84,11 +84,13 @@ void vxs
 			{
 				make_shower_pion_bitmap(&pion_bitmap.segment, seg_num);
 				pion_information.total_energy += fadc_hits.vxs_chan[ch].e;
+				pion_information.total_hits++;
 			}
 			if(det_id == SHOWER_MAX)
 			{
 				make_shower_pion_bitmap(&shower_bitmap.segment, seg_num);
 				shower_information.total_energy += fadc_hits.vxs_chan[ch].e;
+				shower_information.total_hits++;
 			}
 			make_timing_bitmap(fadc_hits.vxs_chan[ch].t, &arr_trig_bitmap.trig_array[det_id-7]);
 

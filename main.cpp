@@ -78,6 +78,7 @@ int main()
 	}
 	// to make output prettier
 	string border = "_________________________________________________________________________________________";
+
 	while( !s_det_timing.empty() ){
 		trigger_array_t output = s_det_timing.read();
 		cout << border << endl;
@@ -99,31 +100,59 @@ int main()
 			for( int time_tick = 7; time_tick > -1; time_tick-- ){
 				cout << "[" <<output.trig_array[det_index].trig[time_tick] << "]";
 			}
-			cout << endl;
+			cout << "---" << endl;
 			t32ns++;
 		}
 		cout << border << endl;
 	}
 	while( !s_pion_bitmap.empty() ){
 		shower_pion_det_bitmap_t output = s_pion_bitmap.read();
-
+		cout << "PION: MSB(Seg#28) <----------> LSB (Seg#1)" << endl;
+		for( int segment_index = 27; segment_index > -1; segment_index-- ){
+			cout << "[" << output.segment[segment_index] << "]";
+		}
+		cout << endl;
 	}
 	while( !s_shower_bitmap.empty() ){
 		shower_pion_det_bitmap_t output = s_shower_bitmap.read();
+		cout << border << endl;
+		cout << "SHOWER_MAX: MSB(Seg#28) <----------> LSB (Seg#1)" << endl;
+		for( int segment_index = 27; segment_index > -1; segment_index-- ){
+			cout << "[" << output.segment[segment_index] << "]";
+		}
+		cout << endl;
 	}
 	while( !s_scint_bitmap.empty() ){
 		scint_det_bitmap_t output = s_scint_bitmap.read();
+		cout << border << endl;
+		cout << "TRIG_SCINT: MSB(Seg_Group#7) <----------> LSB (Seg_Group#1)" << endl;
+		for( int segment_index = 6; segment_index > -1; segment_index-- ){
+			cout << "[" << output.segment[segment_index] << "]";
+		}
+		cout << endl;
 	}
 	while( !s_pion_info.empty() ){
 		det_information_t output = s_pion_info.read();
+		cout << border << endl;
+		cout << "PION:" << endl;
+		cout << "Total Energy: " << output.total_energy << endl;
+		cout << "Number Hits: " << output.total_hits << endl;
 	}
 	while( !s_shower_info.empty() ){
 		det_information_t output = s_shower_info.read();
+		cout << border << endl;
+		cout << "SHOWER_MAX:" << endl;
+		cout << "Total Energy: " << output.total_energy << endl;
+		cout << "Number Hits: " << output.total_hits << endl;
 	}
 	while( !s_scint_info.empty() ){
 		det_information_t output = s_scint_info.read();
+		cout << border << endl;
+		cout << "TRIG_SCINT:" << endl;
+		cout << "Total Energy: " << output.total_energy << endl;
+		cout << "Number Hits: " << output.total_hits << endl;
 	}
-
+	cout << border << endl;
 
 
     return 0;    
