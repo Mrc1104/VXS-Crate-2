@@ -163,7 +163,7 @@ ap_uint<1> scint_coincidence(const ap_uint<3> scint1, const ap_uint<3> scint2, c
  * Parameter:	seg_bitmap - pointer to the segment bitmap
  * 				seg_num - segment number that was hit
  */
-void make_shower_pion_bitmap(ap_uint<28>* seg_bitmap, int seg_num);
+void make_shower_pion_bitmap(ap_uint<28> &seg_bitmap, int seg_num);
 
 /* make_scint_bitmap
  * Brief: 		creates a bitmap of the segment that were hit
@@ -171,7 +171,7 @@ void make_shower_pion_bitmap(ap_uint<28>* seg_bitmap, int seg_num);
  * Parameter:	seg_bitmap - pointer to the segment bitmap
  * 				seg_num - segment number that was hit
  */
-void make_scint_bitmap(ap_uint<7>* seg_bitmap, int seg_num);
+void make_scint_bitmap(ap_uint<7> &seg_bitmap, int seg_num);
 
 
 #endif

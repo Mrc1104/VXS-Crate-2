@@ -107,7 +107,7 @@ int main()
 	}
 	while( !s_pion_bitmap.empty() ){
 		shower_pion_det_bitmap_t output = s_pion_bitmap.read();
-		cout << "PION: MSB(Seg#28) <----------> LSB (Seg#1)" << endl;
+		cout << "PION: MSB(Seg#27) <----------> LSB (Seg#0)" << endl;
 		for( int segment_index = 27; segment_index > -1; segment_index-- ){
 			cout << "[" << output.segment[segment_index] << "]";
 		}
@@ -116,7 +116,7 @@ int main()
 	while( !s_shower_bitmap.empty() ){
 		shower_pion_det_bitmap_t output = s_shower_bitmap.read();
 		cout << border << endl;
-		cout << "SHOWER_MAX: MSB(Seg#28) <----------> LSB (Seg#1)" << endl;
+		cout << "SHOWER_MAX: MSB(Seg#27) <----------> LSB (Seg#0)" << endl;
 		for( int segment_index = 27; segment_index > -1; segment_index-- ){
 			cout << "[" << output.segment[segment_index] << "]";
 		}
@@ -125,7 +125,7 @@ int main()
 	while( !s_scint_bitmap.empty() ){
 		scint_det_bitmap_t output = s_scint_bitmap.read();
 		cout << border << endl;
-		cout << "TRIG_SCINT: MSB(Seg_Group#7) <----------> LSB (Seg_Group#1)" << endl;
+		cout << "TRIG_SCINT: MSB(Seg_Group#6) <----------> LSB (Seg_Group#0)" << endl;
 		for( int segment_index = 6; segment_index > -1; segment_index-- ){
 			cout << "[" << output.segment[segment_index] << "]";
 		}

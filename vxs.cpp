@@ -74,7 +74,7 @@ void vxs
 				}
 
 				// the scint pairs are aligned front to back so they correspond to the same 4 segments (each pair covers 4 segments)
-				make_scint_bitmap(&scint_bitmap.segment, seg_num);
+				make_scint_bitmap(scint_bitmap.segment, seg_num);
 				scint_information.total_energy += fadc_hits.vxs_chan[ch].e;
 				scint_information.total_hits++;
 			}
@@ -83,13 +83,13 @@ void vxs
 		{
 			if(det_id == PION_DET)
 			{
-				make_shower_pion_bitmap(&pion_bitmap.segment, seg_num);
+				make_shower_pion_bitmap(pion_bitmap.segment, seg_num);
 				pion_information.total_energy += fadc_hits.vxs_chan[ch].e;
 				pion_information.total_hits++;
 			}
 			if(det_id == SHOWER_MAX)
 			{
-				make_shower_pion_bitmap(&shower_bitmap.segment, seg_num);
+				make_shower_pion_bitmap(shower_bitmap.segment, seg_num);
 				shower_information.total_energy += fadc_hits.vxs_chan[ch].e;
 				shower_information.total_hits++;
 			}
@@ -128,12 +128,12 @@ ap_uint<1> scint_coincidence(const ap_uint<3> scint1, const ap_uint<3> scint2, a
 
 }
 
-void make_shower_pion_bitmap(ap_uint<28>* seg_bitmap, int seg_num)
+void make_shower_pion_bitmap(ap_uint<28>& seg_bitmap, int seg_num)
 {
 	seg_bitmap[seg_num] = 1;
 }
 
-void make_scint_bitmap(ap_uint<7>* seg_bitmap, int seg_num)
+void make_scint_bitmap(ap_uint<7>& seg_bitmap, int seg_num)
 {
 	// One scintillator covers 4 segments
 	// [0]-[3] -> [0]
