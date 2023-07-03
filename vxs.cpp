@@ -20,7 +20,7 @@ void vxs
 {
 	fadc_hits_t fadc_hits = s_fadc_hits.read();
 
-	// initilize data elements
+	// Initialize data elements
 	trigger_array_t arr_trig_bitmap = {0,0,0};
 
 	shower_pion_det_bitmap_t shower_bitmap = {0,0};

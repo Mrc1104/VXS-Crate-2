@@ -1,5 +1,7 @@
 #include <iostream>
-
+using std::cout; using std::endl;
+#include <string>
+using std::string;
 #include "vxs.h"
 #include "variables.h"
 
@@ -58,9 +60,7 @@ int main()
 	fadc_hits_t fadc_hits;
 	generateRndData(fadc_hits.vxs_chan);
 	s_fadc_hits.write(fadc_hits);
-	std::cout << "NOT HERE" << std::endl;
 	while(!s_fadc_hits.empty()){
-		std::cout << "HERE" << std::endl;
 		vxs
 		(
 				hit_dt,
@@ -76,28 +76,52 @@ int main()
 				s_scint_info
 		);
 	}
-
-
+	// to make output prettier
+	string border = "_________________________________________________________________________________________";
 	while( !s_det_timing.empty() ){
 		trigger_array_t output = s_det_timing.read();
+		cout << border << endl;
+		for( int det_index = 0; det_index < 3; det_index++ ){
+			int t32ns = 0;
+			 /* output.trig_array[0] => scint
+				output.trig_array[1] => pion
+			    output.trig_array[2] => shower
+			 */
+			string det_name= "";
+			if(det_index == 0) { det_name = "TRIG_SCINT"; }
+			if(det_index == 1) { det_name = "PION"; }
+			if(det_index == 2) { det_name = "SHOWER_MAX"; }
+			cout << det_name << ": Timing Information: MSB(12ns) <----------> LSB (-16ns)" << endl;
+			for( int time_tick = 7; time_tick > -1; time_tick-- ){
+				if(output.trig_array[det_index].trig[time_tick])
+					cout << "Trigger Found at T=" << ( (t32ns*32)+(time_tick*4)-16 ) << "ns\n";
+			}
+			for( int time_tick = 7; time_tick > -1; time_tick-- ){
+				cout << "[" <<output.trig_array[det_index].trig[time_tick] << "]";
+			}
+			cout << endl;
+			t32ns++;
+		}
+		cout << border << endl;
 	}
 	while( !s_pion_bitmap.empty() ){
 		shower_pion_det_bitmap_t output = s_pion_bitmap.read();
+
 	}
 	while( !s_shower_bitmap.empty() ){
 		shower_pion_det_bitmap_t output = s_shower_bitmap.read();
 	}
 	while( !s_scint_bitmap.empty() ){
-		s_scint_bitmap output = s_scint_bitmap.read();
+		scint_det_bitmap_t output = s_scint_bitmap.read();
 	}
 	while( !s_pion_info.empty() ){
 		det_information_t output = s_pion_info.read();
 	}
 	while( !s_shower_info.empty() ){
-		det_information_t output = s_shower_info.empty();
+		det_information_t output = s_shower_info.read();
 	}
 	while( !s_scint_info.empty() ){
-		det_information_t output.read();
+		det_information_t output = s_scint_info.read();
 	}
 
 
