@@ -76,6 +76,7 @@ void vxs
 				// the scint pairs are aligned front to back so they correspond to the same 4 segments (each pair covers 4 segments)
 				make_scint_bitmap(&scint_bitmap.segment, seg_num);
 				scint_information.total_energy += fadc_hits.vxs_chan[ch].e;
+				scint_information.total_hits++;
 			}
 		}
 		else
@@ -93,7 +94,6 @@ void vxs
 				shower_information.total_hits++;
 			}
 			make_timing_bitmap(fadc_hits.vxs_chan[ch].t, &arr_trig_bitmap.trig_array[det_id-7]);
-
 		}
 		// make bitmaps
 	} // end for-loop
