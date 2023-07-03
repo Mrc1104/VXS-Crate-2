@@ -135,5 +135,14 @@ void make_shower_pion_bitmap(ap_uint<28>* seg_bitmap, int seg_num)
 
 void make_scint_bitmap(ap_uint<7>* seg_bitmap, int seg_num)
 {
-	seg_bitmap[seg_num] = 1;
+	// One scintillator covers 4 segments
+	// [0]-[3] -> [0]
+	// [4]-[7] -> [1]
+	//  ...
+	// [24]-[27]->[7]
+
+	int seg_group = seg_num % 4;
+	int group = (seg_num - seg_group)/4;
+
+	seg_bitmap[group] = 1;
 }
