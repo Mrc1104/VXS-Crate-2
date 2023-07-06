@@ -19,7 +19,21 @@ void vxs
 )
 {
 	fadc_hits_t fadc_hits = s_fadc_hits.read();
+#ifndef __SYNTHESIS__
+  // Initialize for simulation only (creates a problem for synthesis scheduling)
+  static fadc_hits_t fadc_hits_pre = {0,0};
+#else
+  static fadc_hits_t fadc_hits_pre;
+#endif
 
+
+	hit_t arr_event[N_CHAN] = {0,0,0,0};
+	for(int ch = 0; ch < N_CHAN; ch++){
+#pragma HLS UNROLL
+		arr_event[ch] = make_event(fadc_hits_pre.vxs_chan[ch], fadc_hits.vxs_chan[ch]);
+	}
+	// set curr fadc data to previous fadc data
+	fadc_hits_pre = fadc_hits;
 	// Initialize data elements
 	trigger_array_t arr_trig_bitmap = {0,0,0};
 
@@ -145,4 +159,17 @@ void make_scint_bitmap(ap_uint<7>& seg_bitmap, int seg_num)
 	int group = (seg_num - seg_group)/4;
 
 	seg_bitmap[group] = 1;
+}
+
+hit_t make_event(
+	hit_t pre_hit, 
+	hit_t cur_hit
+)
+{
+	hit_t tmp = {0,0};
+	if(pre_hit.t >=4)
+		tmp = pre_hit;
+	else if(cur_hit.t < 4)
+		tmp = cur_hit;
+	return tmp;
 }
