@@ -50,7 +50,7 @@ void vxs
 		det_information_t scint_information = {0,0};
 
 	for(int ch = 0; ch < N_CHAN; ch++){
-		if(!fadc_hits.vxs_chan[ch].e>=energy_threshold){continue;}
+		if(arr_event[ch].e<energy_threshold){continue;}
 		int fadc_channel = ch%16; // channel # inside fadc ( [0 , 15] )
 		int slot = (ch - fadc_channel)/16; // slot # 9starts at 0)
 		/* Get Channel to Detector Mapping */
@@ -61,7 +61,7 @@ void vxs
 		/*
 		//Debuging block
 		cout << "Channel: " << ch << endl;
-		cout << "Energy: " << fadc_hits.vxs_chan[ch].e << endl;
+		cout << "Energy: " << arr_event[ch].e << endl;
 		cout << "det_id: " << det_id << endl;
 		cout << "seg_num: " << seg_num << endl;
 		cout << "sub_element: " << sub_element << endl;
@@ -70,8 +70,8 @@ void vxs
 		if(det_id == NONE){continue;}
 		if( det_id == TRIG_SCINT )
 		{
-			ap_uint<3> scint1_time = fadc_hits.vxs_chan[ch].t;
-			ap_uint<3> scint2_time = fadc_hits.vxs_chan[sub_element].t;
+			ap_uint<3> scint1_time = arr_event[ch].t;
+			ap_uint<3> scint2_time = arr_event[sub_element].t;
 			if( (scint_coincidence(scint1_time,scint2_time, hit_dt) ) && (ch < sub_element))
 			{
 				// (bool statement # 1) == check to see if pair timing satisfies coincidence tolerance
@@ -89,7 +89,7 @@ void vxs
 
 				// the scint pairs are aligned front to back so they correspond to the same 4 segments (each pair covers 4 segments)
 				make_scint_bitmap(scint_bitmap.segment, seg_num);
-				scint_information.total_energy += fadc_hits.vxs_chan[ch].e;
+				scint_information.total_energy += arr_event[ch].e;
 				scint_information.total_hits++;
 			}
 		}
@@ -98,16 +98,16 @@ void vxs
 			if(det_id == PION_DET)
 			{
 				make_shower_pion_bitmap(pion_bitmap.segment, seg_num);
-				pion_information.total_energy += fadc_hits.vxs_chan[ch].e;
+				pion_information.total_energy += arr_event[ch].e;
 				pion_information.total_hits++;
 			}
 			if(det_id == SHOWER_MAX)
 			{
 				make_shower_pion_bitmap(shower_bitmap.segment, seg_num);
-				shower_information.total_energy += fadc_hits.vxs_chan[ch].e;
+				shower_information.total_energy += arr_event[ch].e;
 				shower_information.total_hits++;
 			}
-			make_timing_bitmap(fadc_hits.vxs_chan[ch].t, &arr_trig_bitmap.trig_array[det_id-7]);
+			make_timing_bitmap(arr_event[ch].t, &arr_trig_bitmap.trig_array[det_id-7]);
 		}
 		// make bitmaps
 	} // end for-loop
