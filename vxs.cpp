@@ -49,7 +49,7 @@ void vxs
 		det_information_t pion_information = {0,0};
 		det_information_t scint_information = {0,0};
 	for(int ch = 0; ch < N_CHAN; ch++){
-		if(arr_event[ch].e<energy_threshold){continue;}
+		// if(arr_event[ch].e<energy_threshold){continue;}
 		int fadc_channel = ch%16; // channel # inside fadc ( [0 , 15] )
 		int slot = (ch - fadc_channel)/16; // slot # 9starts at 0)
 		/* Get Channel to Detector Mapping */
