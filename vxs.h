@@ -60,7 +60,7 @@ typedef struct
 //				 We have three detector types so three elements
 //				 IMPORTANT:
 //				 trig_array[0] => scint detectors
-//				 trif_array[1] => pion detectors
+//				 trig_array[1] => pion detectors
 //				 trig_array[2] => shower detectors
 //				 See detector_type.h to see how this was determined (det_enum int# -> zero)
 typedef struct
