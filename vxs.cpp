@@ -51,7 +51,7 @@ void vxs
 	for(int ch = 0; ch < N_CHAN; ch++){
 		// if(arr_event[ch].e<energy_threshold){continue;}
 		int fadc_channel = ch%16; // channel # inside fadc ( [0 , 15] )
-		int slot = (ch - fadc_channel)/16; // slot # 9starts at 0)
+		int slot = (ch - fadc_channel)/16; // slot # 9 starts at 0)
 		/* Get Channel to Detector Mapping */
 		int det_id = chmap[slot][fadc_channel].DET_ID;
 		int seg_num = chmap[slot][fadc_channel].SEG_NUM;
