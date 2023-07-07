@@ -56,7 +56,6 @@ void vxs
 		int det_id = chmap[slot][fadc_channel].DET_ID;
 		int seg_num = chmap[slot][fadc_channel].SEG_NUM;
 		int sub_element = chmap[slot][fadc_channel].SUB_ELEMENT;
-		cout << "DET ID: " << det_id << "\tChannel: " << ch <<   endl;
 		/*
 		//Debuging block
 		cout << "Channel: " << ch << endl;
@@ -73,7 +72,6 @@ void vxs
 			ap_uint<3> scint2_time = arr_event[sub_element].t;
 			if( (scint_coincidence(scint1_time,scint2_time, hit_dt) ) && (ch < sub_element))
 			{
-				cout << "TRIG_MAX" << endl;
 
 				// (bool statement # 1) == check to see if pair timing satisfies coincidence tolerance
 				// (bool statement # 2) == check to make sure we do not double count
@@ -98,14 +96,12 @@ void vxs
 		{
 			if(det_id == PION_DET)
 			{
-				cout << "PION_DET" << endl;
 				make_shower_pion_bitmap(pion_bitmap.segment, seg_num);
 				pion_information.total_energy += arr_event[ch].e;
 				pion_information.total_hits++;
 			}
 			if(det_id == SHOWER_MAX)
 			{
-				cout << "SHOWER_MAX" << endl;
 				make_shower_pion_bitmap(shower_bitmap.segment, seg_num);
 				shower_information.total_energy += arr_event[ch].e;
 				shower_information.total_hits++;
