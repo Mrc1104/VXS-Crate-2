@@ -57,7 +57,7 @@ void vxs
 		int det_id = chmap[slot][fadc_channel].DET_ID;
 		int seg_num = chmap[slot][fadc_channel].SEG_NUM;
 		int sub_element = chmap[slot][fadc_channel].SUB_ELEMENT;
-
+		cout << "DET ID: " << det_id << endl;
 		/*
 		//Debuging block
 		cout << "Channel: " << ch << endl;
