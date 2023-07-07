@@ -13,24 +13,24 @@ void generateRndData(hit_t* vxs_chan){
 	for(int ch = 0; ch < N_CHAN; ch++){
 		energy = 0;
 		time = 0;
-//		if(ch%8 < 4){ // rings 1 - 4
-//           	if( (rand()%100) < 5 ){ // 5% chance
-//               	energy = rand() % 8192;
-//               	time = rand() % 8;
-//           	}
-//        }
-//        else if( (ch%8 < 7) && (ch%8 > 3) ){ // rings 5a, 5b, 5c
-//           	if( (rand()%100) < 10 ){ // 10% chance
-//               	energy = rand() % 8192;
-//               	time = rand() % 8;
-//           	}
-//        }
-//        else if( ch%8 > 6){ // ring 6
-//           	if( (rand()%100) < 5 ){ // 5% chance
-//               	energy = rand() % 8192;
-//               	time = rand() % 8;
-//           	}
-//        }
+		if(ch%8 < 4){ // rings 1 - 4
+          	if( (rand()%100) < 5 ){ // 5% chance
+              	energy = rand() % 8192;
+              	time = rand() % 8;
+          	}
+       }
+       else if( (ch%8 < 7) && (ch%8 > 3) ){ // rings 5a, 5b, 5c
+          	if( (rand()%100) < 10 ){ // 10% chance
+              	energy = rand() % 8192;
+              	time = rand() % 8;
+          	}
+       }
+       else if( ch%8 > 6){ // ring 6
+          	if( (rand()%100) < 5 ){ // 5% chance
+              	energy = rand() % 8192;
+              	time = rand() % 8;
+          	}
+       }
 		if( ((rand()%100) + 1) < 51){ // 50% chance
 			               	energy = rand() % 8192;
 			               	time = rand() % 8;
