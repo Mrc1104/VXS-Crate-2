@@ -74,6 +74,8 @@ void vxs
 			ap_uint<3> scint2_time = arr_event[sub_element].t;
 			if( (scint_coincidence(scint1_time,scint2_time, hit_dt) ) && (ch < sub_element))
 			{
+				cout << "TRIG_MAX" << endl;
+
 				// (bool statement # 1) == check to see if pair timing satisfies coincidence tolerance
 				// (bool statement # 2) == check to make sure we do not double count
 				if(scint1_time > scint2_time) // remember, the timing data reported by the fadc is flipped. See description of make_timing_bitmap()
@@ -97,19 +99,20 @@ void vxs
 		{
 			if(det_id == PION_DET)
 			{
+				cout << "PION_DET" << endl;
 				make_shower_pion_bitmap(pion_bitmap.segment, seg_num);
 				pion_information.total_energy += arr_event[ch].e;
 				pion_information.total_hits++;
 			}
 			if(det_id == SHOWER_MAX)
 			{
+				cout << "SHOWER_MAX" << endl;
 				make_shower_pion_bitmap(shower_bitmap.segment, seg_num);
 				shower_information.total_energy += arr_event[ch].e;
 				shower_information.total_hits++;
 			}
 			make_timing_bitmap(arr_event[ch].t, &arr_trig_bitmap.trig_array[det_id-7]);
 		}
-		// make bitmaps
 	} // end for-loop
 
 	// write data to output streams
