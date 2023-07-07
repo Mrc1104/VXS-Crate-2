@@ -48,7 +48,6 @@ void vxs
 		det_information_t shower_information = {0,0};
 		det_information_t pion_information = {0,0};
 		det_information_t scint_information = {0,0};
-
 	for(int ch = 0; ch < N_CHAN; ch++){
 		if(arr_event[ch].e<energy_threshold){continue;}
 		int fadc_channel = ch%16; // channel # inside fadc ( [0 , 15] )
@@ -57,7 +56,7 @@ void vxs
 		int det_id = chmap[slot][fadc_channel].DET_ID;
 		int seg_num = chmap[slot][fadc_channel].SEG_NUM;
 		int sub_element = chmap[slot][fadc_channel].SUB_ELEMENT;
-		cout << "DET ID: " << det_id << endl;
+		cout << "DET ID: " << det_id << "\tChannel: " << ch <<   endl;
 		/*
 		//Debuging block
 		cout << "Channel: " << ch << endl;
