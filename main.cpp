@@ -18,8 +18,41 @@ void generateRndData(hit_t* vxs_chan){
 			time = rand() % 8;
 		}
 		vxs_chan[ch].e = energy;
-		vxs_chan[ch].t = energy;
+		vxs_chan[ch].t = time;
 	}
+}
+
+void make_known_data(hit_t* vxs_chan){
+	
+	ap_uint<13> energy;
+	ap_uint<3> time;
+	for(int ch = 0; ch < N_CHAN; ch++){
+		energy = 5;
+		time = 5;
+		int fadc_channel = ch%16;	
+		int slot = (ch - fadc_channel)/16;
+		if(slot == 2){
+			if(fadc_channel > 11){
+				energy = 25;
+				time = 0;
+			}	
+		}
+		if(slot == 4){
+			if(fadc_channel > 11){
+				energy = 25;
+				time = 0;
+			}	
+		}
+		if(slot == 5){
+			if(fadc_channel > 13){
+				energy = 25;
+				time = 0;
+			}	
+		}
+		vxs_chan[ch].e = energy;
+		vxs_chan[ch].t = time;
+	}
+
 }
 
 int main()
@@ -40,7 +73,8 @@ int main()
 
 
 	fadc_hits_t fadc_hits;
-	generateRndData(fadc_hits.vxs_chan);
+	// generateRndData(fadc_hits.vxs_chan);
+	make_known_data(fadc_hits.vxs_chan);
 	s_fadc_hits.write(fadc_hits);
 	while(!s_fadc_hits.empty()){
 		vxs
