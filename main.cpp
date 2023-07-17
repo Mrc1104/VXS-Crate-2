@@ -27,26 +27,26 @@ void make_known_data(hit_t* vxs_chan){
 	ap_uint<13> energy;
 	ap_uint<3> time;
 	for(int ch = 0; ch < N_CHAN; ch++){
-		energy = 5;
-		time = 5;
+		energy = 0;
+		time = 0;
 		int fadc_channel = ch%16;	
 		int slot = (ch - fadc_channel)/16;
 		if(slot == 2){
 			if(fadc_channel > 11){
 				energy = 25;
-				time = 0;
+				time = 2;
 			}	
 		}
 		if(slot == 4){
 			if(fadc_channel > 11){
 				energy = 25;
-				time = 0;
+				time = 2;
 			}	
 		}
 		if(slot == 5){
 			if(fadc_channel > 13){
 				energy = 25;
-				time = 0;
+				time = 2;
 			}	
 		}
 		vxs_chan[ch].e = energy;
