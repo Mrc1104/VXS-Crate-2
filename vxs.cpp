@@ -1,6 +1,6 @@
 #include "vxs.h"
 #include <iostream>
-		using std::cout; using std::endl;
+using std::cout; using std::endl;
 
 // Top function for Vitis
 void vxs
