@@ -31,19 +31,19 @@ void make_known_data(hit_t* vxs_chan){
 		time = 0;
 		int fadc_channel = ch%16;	
 		int slot = (ch - fadc_channel)/16;
-		if(slot == 2){
+		if(slot == 1){
+			if(fadc_channel > 11){
+				energy = 25;
+				time = 2;
+			}	
+		}
+		if(slot == 3){
 			if(fadc_channel > 11){
 				energy = 25;
 				time = 2;
 			}	
 		}
 		if(slot == 4){
-			if(fadc_channel > 11){
-				energy = 25;
-				time = 2;
-			}	
-		}
-		if(slot == 5){
 			if(fadc_channel > 13){
 				energy = 25;
 				time = 2;
