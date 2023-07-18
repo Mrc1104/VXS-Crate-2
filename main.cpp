@@ -1,6 +1,7 @@
 #include <iostream>
-using std::cout; using std::endl;
+using std::fout; using std::endl;
 #include <string>
+#include <fstream>
 using std::string;
 #include "vxs.h"
 #include "variables.h"
@@ -95,9 +96,10 @@ int main()
 	// to make output prettier
 	string border = "_________________________________________________________________________________________";
 
+	std::ofstream fout("C:/Users/mrcco/Documents/GitHub/VXS-Crate-2/output.txt");
 	while( !s_det_timing.empty() ){
 		trigger_array_t output = s_det_timing.read();
-		cout << border << endl;
+		fout << border << endl;
 		for( int det_index = 0; det_index < 3; det_index++ ){
 			int t32ns = 0;
 			 /* output.trig_array[0] => scint
@@ -108,67 +110,67 @@ int main()
 			if(det_index == 0) { det_name = "TRIG_SCINT"; }
 			if(det_index == 1) { det_name = "PION"; }
 			if(det_index == 2) { det_name = "SHOWER_MAX"; }
-			cout << det_name << ": Timing Information: MSB(12ns) <----------> LSB (-16ns)" << endl;
+			fout << det_name << ": Timing Information: MSB(12ns) <----------> LSB (-16ns)" << endl;
 			for( int time_tick = 7; time_tick > -1; time_tick-- ){
 				if(output.trig_array[det_index].trig[time_tick])
-					cout << "Trigger Found at T=" << ( (t32ns*32)+(time_tick*4)-16 ) << "ns\n";
+					fout << "Trigger Found at T=" << ( (t32ns*32)+(time_tick*4)-16 ) << "ns\n";
 			}
 			for( int time_tick = 7; time_tick > -1; time_tick-- ){
-				cout << "[" <<output.trig_array[det_index].trig[time_tick] << "]";
+				fout << "[" << output.trig_array[det_index].trig[time_tick] << "]";
 			}
-			cout << "---" << endl;
+			fout << "---" << endl;
 			t32ns++;
 		}
-		cout << border << endl;
+		fout << border << endl;
 	}
 	while( !s_pion_bitmap.empty() ){
 		shower_pion_det_bitmap_t output = s_pion_bitmap.read();
-		cout << "PION: MSB(Seg#27) <----------> LSB (Seg#0)" << endl;
+		fout << "PION: MSB(Seg#27) <----------> LSB (Seg#0)" << endl;
 		for( int segment_index = 27; segment_index > -1; segment_index-- ){
-			cout << "[" << output.segment[segment_index] << "]";
+			fout << "[" << output.segment[segment_index] << "]";
 		}
-		cout << endl;
+		fout << endl;
 	}
 	while( !s_shower_bitmap.empty() ){
 		shower_pion_det_bitmap_t output = s_shower_bitmap.read();
-		cout << border << endl;
-		cout << "SHOWER_MAX: MSB(Seg#27) <----------> LSB (Seg#0)" << endl;
+		fout << border << endl;
+		fout << "SHOWER_MAX: MSB(Seg#27) <----------> LSB (Seg#0)" << endl;
 		for( int segment_index = 27; segment_index > -1; segment_index-- ){
-			cout << "[" << output.segment[segment_index] << "]";
+			fout << "[" << output.segment[segment_index] << "]";
 		}
-		cout << endl;
+		fout << endl;
 	}
 	while( !s_scint_bitmap.empty() ){
 		scint_det_bitmap_t output = s_scint_bitmap.read();
-		cout << border << endl;
-		cout << "TRIG_SCINT: MSB(Seg_Group#6) <----------> LSB (Seg_Group#0)" << endl;
+		fout << border << endl;
+		fout << "TRIG_SCINT: MSB(Seg_Group#6) <----------> LSB (Seg_Group#0)" << endl;
 		for( int segment_index = 6; segment_index > -1; segment_index-- ){
-			cout << "[" << output.segment[segment_index] << "]";
+			fout << "[" << output.segment[segment_index] << "]";
 		}
-		cout << endl;
+		fout << endl;
 	}
 	while( !s_pion_info.empty() ){
 		det_information_t output = s_pion_info.read();
-		cout << border << endl;
-		cout << "PION:" << endl;
-		cout << "Total Energy: " << output.total_energy << endl;
-		cout << "Number Hits: " << output.total_hits << endl;
+		fout << border << endl;
+		fout << "PION:" << endl;
+		fout << "Total Energy: " << output.total_energy << endl;
+		fout << "Number Hits: " << output.total_hits << endl;
 	}
 	while( !s_shower_info.empty() ){
 		det_information_t output = s_shower_info.read();
-		cout << border << endl;
-		cout << "SHOWER_MAX:" << endl;
-		cout << "Total Energy: " << output.total_energy << endl;
-		cout << "Number Hits: " << output.total_hits << endl;
+		fout << border << endl;
+		fout << "SHOWER_MAX:" << endl;
+		fout << "Total Energy: " << output.total_energy << endl;
+		fout << "Number Hits: " << output.total_hits << endl;
 	}
 	while( !s_scint_info.empty() ){
 		det_information_t output = s_scint_info.read();
-		cout << border << endl;
-		cout << "TRIG_SCINT:" << endl;
-		cout << "Total Energy: " << output.total_energy << endl;
-		cout << "Number Hits: " << output.total_hits << endl;
+		fout << border << endl;
+		fout << "TRIG_SCINT:" << endl;
+		fout << "Total Energy: " << output.total_energy << endl;
+		fout << "Number Hits: " << output.total_hits << endl;
 	}
-	cout << border << endl;
+	fout << border << endl;
 
 
     return 0;    
