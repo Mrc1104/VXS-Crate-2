@@ -18,7 +18,7 @@ void generateRndData(hit_t* vxs_chan){
 			time = rand() % 8;
 		}
 		vxs_chan[ch].e = energy;
-		vxs_chan[ch].t = energy;
+		vxs_chan[ch].t = time;
 	}
 }
 
