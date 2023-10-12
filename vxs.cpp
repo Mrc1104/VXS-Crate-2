@@ -42,12 +42,10 @@ void vxs
 	scint_det_bitmap_t scint_bitmap = {0,0,};
 
 	// possible optimization, store hit data in new arrays then add later for better parallelism
-//	det_information_t shower_information[28] = {0,0};
-//	det_information_t pion_information[28] = {0,0};
-//	det_information_t scint_information[7] = {0,0};
-		det_information_t shower_information = {0,0};
-		det_information_t pion_information = {0,0};
-		det_information_t scint_information = {0,0};
+
+	det_information_t shower_information = {0,0};
+	det_information_t pion_information = {0,0};
+	det_information_t scint_information = {0,0};
 	for(int ch = 0; ch < N_CHAN; ch++){
 		// if(arr_event[ch].e<energy_threshold){continue;}
 		int fadc_channel = ch%16; // channel # inside fadc ( [0 , 15] )
@@ -56,15 +54,8 @@ void vxs
 		int det_id = chmap[slot][fadc_channel].DET_ID;
 		int seg_num = chmap[slot][fadc_channel].SEG_NUM;
 		int sub_element = chmap[slot][fadc_channel].SUB_ELEMENT;
-		/*
-		//Debuging block
-		cout << "Channel: " << ch << endl;
-		cout << "Energy: " << arr_event[ch].e << endl;
-		cout << "det_id: " << det_id << endl;
-		cout << "seg_num: " << seg_num << endl;
-		cout << "sub_element: " << sub_element << endl;
-		cout << " ________________ " << endl;
-		*/
+		/* Check whch detector we are dealing with
+		   It is possible no detector is slotted (empty fadc channel) */
 		if(det_id == NONE){continue;}
 		if( det_id == TRIG_SCINT )
 		{
@@ -72,17 +63,17 @@ void vxs
 			ap_uint<3> scint2_time = arr_event[sub_element].t;
 			if( (scint_coincidence(scint1_time,scint2_time, hit_dt) ) && (ch < sub_element))
 			{
-
 				// (bool statement # 1) == check to see if pair timing satisfies coincidence tolerance
 				// (bool statement # 2) == check to make sure we do not double count
+
 				if(scint1_time > scint2_time) // remember, the timing data reported by the fadc is flipped. See description of make_timing_bitmap()
 				{
-					// the shortest time is out designated "true" time ; scint1_time is shorter than scint2
+					// the shortest time is our designated "true" time ; scint1_time is shorter than scint2
 					make_timing_bitmap(scint1_time, &arr_trig_bitmap.trig_array[det_id-7]);
 				}
 				else
 				{
-					// the shortest time is out designated "true" time ; scint2_time is shorter than scint1
+					// the shortest time is our designated "true" time ; scint2_time is shorter than scint1
 					make_timing_bitmap(scint2_time, &arr_trig_bitmap.trig_array[det_id-7]);
 				}
 
@@ -92,22 +83,20 @@ void vxs
 				scint_information.total_hits++;
 			}
 		}
-		else
+
+		else if(det_id == PION_DET)
 		{
-			if(det_id == PION_DET)
-			{
-				make_shower_pion_bitmap(pion_bitmap.segment, seg_num);
-				pion_information.total_energy += arr_event[ch].e;
-				pion_information.total_hits++;
-			}
-			if(det_id == SHOWER_MAX)
-			{
-				make_shower_pion_bitmap(shower_bitmap.segment, seg_num);
-				shower_information.total_energy += arr_event[ch].e;
-				shower_information.total_hits++;
-			}
-			make_timing_bitmap(arr_event[ch].t, &arr_trig_bitmap.trig_array[det_id-7]);
+			make_shower_pion_bitmap(pion_bitmap.segment, seg_num);
+			pion_information.total_energy += arr_event[ch].e;
+			pion_information.total_hits++;
 		}
+		else if(det_id == SHOWER_MAX)
+		{
+			make_shower_pion_bitmap(shower_bitmap.segment, seg_num);
+			shower_information.total_energy += arr_event[ch].e;
+			shower_information.total_hits++;
+		}
+		make_timing_bitmap(arr_event[ch].t, &arr_trig_bitmap.trig_array[det_id-7]);
 	} // end for-loop
 
 	// write data to output streams
