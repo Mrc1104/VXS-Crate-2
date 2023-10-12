@@ -45,6 +45,10 @@ We have 10 FADC with one channel free that provides energy and time data every 3
 The configuration is done very statically using configuration scripts.
 * map.csh - Takes input from the user, calls the script.mk, and generates chan-det mapping arrays. 
 
+
+### Additional Comments:
+The Trigger Scintillator pairs can rotate into different configurations. That is not codified in this repo. This repo assumes one configuration (det_channel map) and any spatial changes will be accounted for after the fact (offline). 
+
 ## Contact:
 
 Name: Ryan Conaway
